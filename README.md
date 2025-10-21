@@ -1,61 +1,201 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+```markdown
+# 🚀 Job Platform API
 
-## About Laravel
+Une API RESTful complète pour une plateforme d'emploi, développée avec Laravel et Laravel Sanctum. Cette API permet la gestion des utilisateurs, des offres d'emploi et des candidatures avec un système de rôles et permissions avancé.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📋 Table des matières
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Fonctionnalités](#-fonctionnalités)
+- [Architecture Technique](#-architecture-technique)
+- [Installation](#-installation)
+- [Documentation API](#-documentation-api)
+- [Endpoints](#-endpoints)
+- [Sécurité](#-sécurité)
+- [Tests](#-tests)
+- [Technologies](#-technologies)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🌟 Fonctionnalités
 
-## Learning Laravel
+### 🔐 Authentification & Autorisation
+- **Inscription** avec choix de rôle (candidat/employeur)
+- **Connexion** sécurisée avec tokens JWT
+- **Système de rôles** maison (sans packages externes)
+- **Permissions granulaires** par endpoint
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 💼 Gestion des Offres d'Emploi
+- **CRUD complet** pour les employeurs
+- **Recherche avancée** par titre, entreprise, localisation
+- **Statut actif/inactif** des offres
+- **Relations** employeur → offres
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 📝 Système de Candidatures
+- **Postulation** aux offres avec lettre de motivation
+- **Suivi des candidatures** selon le rôle
+- **Statuts** : pending, accepted, rejected
+- **Protection** anti-double candidature
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 📊 Rôles et Permissions
+- **Candidat** : Postuler, voir ses candidatures
+- **Employeur** : Gérer ses offres et candidatures
+- **Administrateur** : Accès complet à toutes les ressources
 
-## Laravel Sponsors
+## 🏗️ Architecture Technique
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+app/
+├── Controllers/
+│   ├── AuthController.php      # Authentification
+│   ├── JobController.php       # Gestion des offres
+│   └── ApplicationController.php # Gestion des candidatures
+├── Models/
+│   ├── User.php               # Utilisateurs
+│   ├── Role.php               # Rôles
+│   ├── Job.php                # Offres d'emploi
+│   └── Application.php        # Candidatures
+routes/
+└── api.php                    # Routes API
+```
 
-### Premium Partners
+## ⚙️ Installation
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Prérequis
+- PHP 8.1+
+- Composer
+- MySQL/PostgreSQL/SQLite
+- Laravel 10+
 
-## Contributing
+### Étapes d'installation
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. **Cloner le repository**
+```bash
+git clone https://github.com/ton-username/job-platform-api.git
+cd job-platform-api
+```
 
-## Code of Conduct
+2. **Installer les dépendances**
+```bash
+composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+3. **Configurer l'environnement**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Security Vulnerabilities
+4. **Configurer la base de données**
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=job_platform
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5. **Exécuter les migrations et seeders**
+```bash
+php artisan migrate --seed
+```
 
-## License
+6. **Installer Laravel Sanctum**
+```bash
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+php artisan migrate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+7. **Démarrer le serveur**
+```bash
+php artisan serve
+```
+
+## 📖 Documentation API
+
+### Accéder à la documentation
+La documentation Swagger est disponible à l'adresse :
+```
+http://localhost:8000/api/documentation
+```
+
+### Installation de la documentation
+```bash
+composer require darkaonline/l5-swagger
+php artisan vendor:publish --provider="L5Swagger\L5SwaggerServiceProvider"
+php artisan l5-swagger:generate
+```
+
+## 🛣️ Endpoints
+
+### 🔐 Authentification
+| Méthode | Endpoint | Description | Accès |
+|---------|----------|-------------|-------|
+| `POST` | `/api/register` | Inscription utilisateur | Public |
+| `POST` | `/api/login` | Connexion | Public |
+| `POST` | `/api/logout` | Déconnexion | Authentifié |
+| `GET` | `/api/me` | Profil utilisateur | Authentifié |
+
+### 💼 Offres d'Emploi
+| Méthode | Endpoint | Description | Accès |
+|---------|----------|-------------|-------|
+| `GET` | `/api/jobs` | Liste des offres | Public |
+| `GET` | `/api/jobs/search` | Recherche d'offres | Public |
+| `GET` | `/api/jobs/{id}` | Détail d'une offre | Public |
+| `POST` | `/api/jobs` | Créer une offre | Employeur |
+| `PUT` | `/api/jobs/{id}` | Modifier une offre | Propriétaire/Admin |
+| `DELETE` | `/api/jobs/{id}` | Supprimer une offre | Propriétaire/Admin |
+
+### 📝 Candidatures
+| Méthode | Endpoint | Description | Accès |
+|---------|----------|-------------|-------|
+| `GET` | `/api/applications` | Lister candidatures | Par rôle |
+| `POST` | `/api/jobs/{id}/apply` | Postuler | Candidat |
+| `PUT` | `/api/applications/{id}` | Modifier statut | Employeur/Admin |
+| `DELETE` | `/api/applications/{id}` | Supprimer | Propriétaire/Employeur/Admin |
+| `GET` | `/api/applications/{id}` | Voir candidature | Autorisé |
+
+## 🛡️ Sécurité
+
+### Mesures implémentées
+- **Tokens JWT** avec Laravel Sanctum
+- **Validation des données** Laravel
+- **Vérification des rôles** manuelle
+- **Protection CSRF** désactivée pour API
+- **Codes HTTP** appropriés (200, 201, 400, 401, 403, 404, 409, 500)
+
+### Permissions par Rôle
+```php
+// Exemple de vérification de rôle
+$userRoles = Auth::user()->roles()->pluck('name')->toArray();
+if (!in_array('employer', $userRoles)) {
+    return response()->json(['message' => 'Unauthorized'], 403);
+}
+```
+
+## 🧪 Tests
+
+### Workflows de test
+1. **Authentification** → Register/Login pour obtenir les tokens
+2. **Employeur** → Créer offre → Voir candidatures
+3. **Candidat** → Rechercher → Postuler → Suivre candidatures
+4. **Admin** → Accès complet
+
+## 🛠️ Technologies
+
+- **Backend** : Laravel 10+
+- **Authentification** : Laravel Sanctum
+- **Base de données** : MySQL/PostgreSQL/SQLite
+- **Documentation** : Swagger/OpenAPI (L5-Swagger)
+- **Validation** : Laravel Validator
+- **Sécurité** : JWT Tokens, RBAC maison
+
+## 📄 License
+
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+
+## 👥 Auteur
+
+Développé avec ❤️ par [Basma Haimer](https://github.com/basmahaimer)
+```
