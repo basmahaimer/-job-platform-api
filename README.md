@@ -21,7 +21,7 @@ Une API RESTful complète pour une plateforme d'emploi, développée avec Larave
 
 ### 🔐 Authentification & Autorisation
 - **Inscription** avec choix de rôle (candidat/employeur)
-- **Connexion** sécurisée avec tokens JWT
+- **Connexion** sécurisée avec tokens Sanctum
 - **Système de rôles** maison (sans packages externes)
 - **Permissions granulaires** par endpoint
 
@@ -55,8 +55,10 @@ app/
 │   ├── Role.php               # Rôles
 │   ├── Job.php                # Offres d'emploi
 │   └── Application.php        # Candidatures
+├── Policies/                  # Politiques d'autorisation
+└── Middleware/               # Middleware personnalisés
 routes/
-└── api.php                    # Routes API
+└── api.php                   # Routes API
 ```
 
 ## ⚙️ Installation
@@ -144,7 +146,7 @@ php artisan l5-swagger:generate
 | `GET` | `/api/jobs/search` | Recherche d'offres | Public |
 | `GET` | `/api/jobs/{id}` | Détail d'une offre | Public |
 | `POST` | `/api/jobs` | Créer une offre | Employeur |
-| `PUT` | `/api/jobs/{id}` | Modifier une offre | Propriétaire/Admin |
+| `PUT`/`PATCH` | `/api/jobs/{id}` | Modifier une offre | Propriétaire/Admin |
 | `DELETE` | `/api/jobs/{id}` | Supprimer une offre | Propriétaire/Admin |
 
 ### 📝 Candidatures
@@ -152,14 +154,14 @@ php artisan l5-swagger:generate
 |---------|----------|-------------|-------|
 | `GET` | `/api/applications` | Lister candidatures | Par rôle |
 | `POST` | `/api/jobs/{id}/apply` | Postuler | Candidat |
-| `PUT` | `/api/applications/{id}` | Modifier statut | Employeur/Admin |
+| `PUT`/`PATCH` | `/api/applications/{id}` | Modifier statut | Employeur/Admin |
 | `DELETE` | `/api/applications/{id}` | Supprimer | Propriétaire/Employeur/Admin |
 | `GET` | `/api/applications/{id}` | Voir candidature | Autorisé |
 
 ## 🛡️ Sécurité
 
 ### Mesures implémentées
-- **Tokens JWT** avec Laravel Sanctum
+- **Tokens Sanctum** pour l'authentification API
 - **Validation des données** Laravel
 - **Vérification des rôles** manuelle
 - **Protection CSRF** désactivée pour API
@@ -176,6 +178,11 @@ if (!in_array('employer', $userRoles)) {
 
 ## 🧪 Tests
 
+### Exécuter les tests
+```bash
+php artisan test
+```
+
 ### Workflows de test
 1. **Authentification** → Register/Login pour obtenir les tokens
 2. **Employeur** → Créer offre → Voir candidatures
@@ -189,7 +196,16 @@ if (!in_array('employer', $userRoles)) {
 - **Base de données** : MySQL/PostgreSQL/SQLite
 - **Documentation** : Swagger/OpenAPI (L5-Swagger)
 - **Validation** : Laravel Validator
-- **Sécurité** : JWT Tokens, RBAC maison
+- **Sécurité** : Sanctum Tokens, RBAC maison
+
+## 🤝 Contributing
+
+Les contributions sont les bienvenues ! Veuillez suivre les étapes suivantes :
+1. Fork le projet
+2. Créer une branche feature (`git checkout -b feature/AmazingFeature`)
+3. Commit les changements (`git commit -m 'Add some AmazingFeature'`)
+4. Push sur la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrir une Pull Request
 
 ## 📄 License
 
@@ -199,3 +215,4 @@ Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
 Développé avec ❤️ par [Basma Haimer](https://github.com/basmahaimer)
 ```
+
