@@ -1,5 +1,4 @@
 
-```markdown
 # 🚀 Job Platform API
 
 Une API RESTful complète pour une plateforme d'emploi, développée avec Laravel et Laravel Sanctum. Cette API permet la gestion des utilisateurs, des offres d'emploi et des candidatures avec un système de rôles et permissions avancé.
