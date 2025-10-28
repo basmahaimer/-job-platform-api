@@ -99,7 +99,7 @@ class JobController extends Controller
      * @OA\Post(
      *     path="/api/jobs",
      *     summary="Créer une nouvelle offre d'emploi",
-     *     description="Crée une nouvelle offre d'emploi (réservé aux employeurs)",
+     *     description="Crée une nouvelle offre d'emploi (réservé aux employeurs et administrateurs)",
      *     tags={"Jobs"},
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
@@ -114,9 +114,9 @@ class JobController extends Controller
      *     ),
      *     @OA\Response(
      *         response=403,
-     *         description="Accès refusé - rôle employeur requis",
+     *         description="Accès refusé - rôle employeur ou admin requis",
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Unauthorized. Employer role required.")
+     *             @OA\Property(property="message", type="string", example="Unauthorized. Employer or Admin role required.")
      *         )
      *     ),
      *     @OA\Response(
@@ -128,10 +128,10 @@ class JobController extends Controller
     public function store(Request $request)
     {
         try {
-            // Vérification du rôle employeur
+            // Vérification du rôle employeur OU admin
             $userRoles = Auth::user()->roles()->pluck('name')->toArray();
-            if (!in_array('employer', $userRoles)) {
-                return response()->json(['message' => 'Unauthorized. Employer role required.'], 403);
+            if (!in_array('employer', $userRoles) && !in_array('admin', $userRoles)) {
+                return response()->json(['message' => 'Unauthorized. Employer or Admin role required.'], 403);
             }
 
             $validated = $request->validate([
